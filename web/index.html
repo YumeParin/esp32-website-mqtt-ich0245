@@ -83,7 +83,7 @@
 
                 const data = await response.json();
                 
-                if (data.success) {
+                if (data.code === 200) {
                     statusText.textContent = `Successfully sent Start signal.`;
                     statusText.style.color = '#4CAF50';
                 }
@@ -105,7 +105,7 @@
 
                 const data = await response.json();
                 
-                if (data.success) {
+                if (data.code === 200) {
                     statusText.textContent = `Successfully sent Stop signal.`;
                     statusText.style.color = '#4CAF50';
                 }
@@ -130,7 +130,7 @@
 
         //         const data = await response.json();
                 
-        //         if (data.success) {
+        //         if (data.code === 200) {
         //             statusText.textContent = `Successfully sent ${state} signal.`;
         //             statusText.style.color = state === 'ON' ? '#4CAF50' : '#f44336';
         //         }
