@@ -75,7 +75,7 @@
             const statusText = document.getElementById('status');
             statusText.textContent = `Sending Start...`;
             try {
-                const response = await fetch(`http://${deviceIp}:80/start/toggle`, {
+                const response = await fetch(`http://${deviceIp}:3000/start`, {
                     method: 'GET',
                     // headers: { 'Content-Type': 'application/json' },
                     // body: JSON.stringify({ state })
@@ -97,7 +97,7 @@
             const statusText = document.getElementById('status');
             statusText.textContent = `Sending Stop...`;
             try {
-                const response = await fetch(`http://${deviceIp}:80/stop/toggle`, {
+                const response = await fetch(`http://${deviceIp}:3000/stop`, {
                     method: 'GET',
                     // headers: { 'Content-Type': 'application/json' },
                     // body: JSON.stringify({ state })
