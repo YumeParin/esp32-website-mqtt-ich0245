@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 Control Dashboard</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        .button-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        button {
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+        button:active {
+            transform: scale(0.95);
+        }
+        #btn-on {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #btn-off {
+            background-color: #f44336;
+            color: white;
+        }
+        #status {
+            margin-top: 25px;
+            color: #888;
+            font-size: 14px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Device Control</h2>
+    
+    <div class="button-container">
+        <input type="text" id="device-ip" placeholder="Enter device ip">
+        <button id="btn-on" onclick="sendStartSignal()">Start</button>
+        <!-- <button id="btn-on" onclick="sendSignal('ON')">ON</button> -->
+        <button id="btn-off" onclick="sendStopSignal()">Stop</button>
+        <!-- <button id="btn-off" onclick="sendSignal('OFF')">OFF</button> -->
+    </div>
+    
+    <div id="status">Waiting for input...</div>
+
+    <script>
+
+        let deviceIp = '127.0.0.1'; 
+        const ipInput = document.getElementById('device-ip');
+        ipInput.addEventListener('change', () => {
+            deviceIp = ipInput.value;
+        });
+
+        async function sendStartSignal() {
+            const statusText = document.getElementById('status');
+            statusText.textContent = `Sending Start...`;
+            try {
+                const response = await fetch(`http://${deviceIp}:80/start/toggle`, {
+                    method: 'GET',
+                    // headers: { 'Content-Type': 'application/json' },
+                    // body: JSON.stringify({ state })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    statusText.textContent = `Successfully sent Start signal.`;
+                    statusText.style.color = '#4CAF50';
+                }
+            } catch (error) {
+                statusText.textContent = 'Error connecting to server.';
+                statusText.style.color = '#f44336';
+            }
+
+        }
+        async function sendStopSignal() {
+            const statusText = document.getElementById('status');
+            statusText.textContent = `Sending Stop...`;
+            try {
+                const response = await fetch(`http://${deviceIp}:80/stop/toggle`, {
+                    method: 'GET',
+                    // headers: { 'Content-Type': 'application/json' },
+                    // body: JSON.stringify({ state })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    statusText.textContent = `Successfully sent Stop signal.`;
+                    statusText.style.color = '#4CAF50';
+                }
+            } catch (error) {
+                statusText.textContent = 'Error connecting to server.';
+                statusText.style.color = '#f44336';
+            }
+
+        }
+
+        // async function sendSignal(state) {
+        //     const statusText = document.getElementById('status');
+        //     statusText.textContent = `Sending ${state}...`;
+
+        //     try {
+        //         // Send the state to our Node.js bridge
+        //         const response = await fetch(`http://${deviceIp}:80/start/toggle`, {
+        //             method: 'POST',
+        //             headers: { 'Content-Type': 'application/json' },
+        //             body: JSON.stringify({ state })
+        //         });
+
+        //         const data = await response.json();
+                
+        //         if (data.success) {
+        //             statusText.textContent = `Successfully sent ${state} signal.`;
+        //             statusText.style.color = state === 'ON' ? '#4CAF50' : '#f44336';
+        //         }
+        //     } catch (error) {
+        //         statusText.textContent = 'Error connecting to server.';
+        //         statusText.style.color = '#f44336';
+        //     }
+        // }
+    </script>
+</body>
+</html>
